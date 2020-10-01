@@ -3,10 +3,13 @@
 use Zttp\Zttp;
 use Zttp\ZttpResponse;
 use PHPUnit\Framework\TestCase;
+use DMS\PHPUnitExtensions\ArraySubset\ArraySubsetAsserts;
 
 class ZttpTest extends TestCase
 {
-    public static function setUpBeforeClass()
+    use ArraySubsetAsserts;
+
+    public static function setUpBeforeClass(): void
     {
         ZttpServer::start();
     }
@@ -495,12 +498,11 @@ class ZttpTest extends TestCase
         $this->assertEquals($this->url('/redirected'), $response->effectiveUri());
     }
 
-    /**
-     * @test
-     * @expectedException \Zttp\ConnectionException
-     */
+    /** @test */
     function client_will_force_timeout()
     {
+        $this->expectException(\Zttp\ConnectionException::class);
+
         Zttp::timeout(1)->get($this->url('/timeout'));
     }
 
